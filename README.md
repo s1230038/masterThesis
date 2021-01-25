@@ -15,7 +15,7 @@ E.g.
 
   $ cp ./result_MA3/main.py .
 
-## 3. Run the experiment.sh
+## 3. Run the experiment
 
   $ ./experiment.sh
 
