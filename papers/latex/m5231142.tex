@@ -1,0 +1,140 @@
+% % %
+% Recommended compilation method:
+%  $ latexmk -pdf m5231142.tex 
+%
+% If you use 
+%  $ latexmk -pdfdvi m5231142.tex
+% then you must write `dvipdfmx' in option of \documentclass, i.e.,
+%  \documentclass[12pt, a4paper, openany, dvipdfmx]{book}
+%
+% % %
+
+% % % Document Type
+% % % Ref.: http://www.biwako.shiga-u.ac.jp/sensei/kumazawa/tex/book.html
+\documentclass[11pt, a4paper, openany]{book}
+
+% % % Necessary
+\usepackage{amssymb, amsmath, latexsym}  % For mathematics [Before hyperref]
+\usepackage[setpagesize=false]{hyperref} % For inserting hyperlink [Before graphicx]
+\usepackage{graphicx}                    % For inserting figure
+\usepackage{subcaption}                  % For caption of figures and tables
+\usepackage[usenames]{color}             % For coloring
+\usepackage[shortlabels]{enumitem}       % For useful enumerate and itemize environment
+\usepackage{comment}                     % For commenting multiline
+\usepackage{cite}                        % For citing references [After hyperref]
+\usepackage{url}                         % For inserting URL
+\usepackage{acro}                        % For listing abbreviations and symbols
+\usepackage{master}                      % For master thesis [After graphicx and color]
+
+% % % Convenient for tables and emphasis
+\usepackage{tabularx}       % For flexible table
+\usepackage{multirow}       % For combining multi rows for table
+\usepackage{colortbl}       % For coloring table
+\usepackage{longtable}      % For long table across multiple pages
+\usepackage[normalem]{ulem} % For flexible underline etc.
+\usepackage{bxascmac}       % For framing multiline
+
+% % % Option
+\usepackage{siunitx}   % For using SI units
+\usepackage{afterpage} % For inserting newpage
+\usepackage{listings}  % For inserting programming code
+\usepackage{docmute}   % For compilation of divided files
+\usepackage{CJKutf8}   % Japanese
+
+% % % Floating figure and table
+\makeatletter
+\newcommand{\figcaption}[1]{\def\@captype{figure}\caption{#1}}
+\newcommand{\tblcaption}[1]{\def\@captype{table}\caption{#1}}
+\makeatother
+
+% % % Inserting Japanese sentence
+\newcommand*{\Ja}[1]{%
+  \begin{CJK}{UTF8}{ipxm}#1\end{CJK}}
+
+% % % Configuration for hyperlink
+\hypersetup{ %
+	breaklinks=true, %
+	colorlinks=false, %
+	urlcolor=blue, %
+	urlbordercolor={0 1 1}}
+
+% % % Define Command
+\newcommand{\bm}[1]{\mbox{\boldmath $#1$}}
+
+% % % Re-define names
+
+% % 論文題目     / Title
+\title{Deep Reinforcement Learning in Forex Trading Using Metrics}
+% % 著者名       / Author name
+\author{HARUGUHCI Takuma}
+% % 修了時期     / Year and month when you complete master course
+\datestamp{March 2021} 
+% % 主査名と職階 / Name and position of chief examiner
+\mainreferee{LI Xiang}    
+\mainrefereeposition{Associate Professor}
+% % 副査名と職階 / Name and position of deputy examiner
+\secondreferee{MORI Kazuyoshi}
+\secondrefereeposition{Professor}
+\thirdreferee{JING Lei}
+\thirdrefereeposition{Senior Associate Professor}
+
+% % You can define abbreviations and symbols, if any.
+% % If you show lists of either abbreviations, symbols or both, 
+% % you should define them in ./Chapter/Acronym.tex
+% % However, if you do not need the lists, you should comment out the following line
+% % and replace \showlist command to \showlists{y}{y}{n}{n}
+\input{./Chapter/Acronym}
+
+\begin{document}
+% % タイトル、著作権、承認ページ、目次の作成 
+% % Make pages for title, copyright, approval and table of contents
+\makefrontmattar
+
+% % 図、表、略語、記号一覧の表示
+% % Show lists of figures, tables, abbreviations and symbols (Optional)
+% % %
+% % If you set 'n' to the fourth argument of \showlists{figures}{tables}{abbreviaions}{symbols}
+% % (i.e. \showlists{y}{y}{y}{n}), list of symbols is not shown.
+% % Similarly, you can decide if you show each list. 
+% % %
+\showlists{y}{y}{y}{y}
+% \showlists{y}{y}{n}{n}
+
+% % 謝辞を挿入 / Acknowledment (Optional)
+\include{./Chapter/Acknowledgment}
+% % 要旨を挿入
+\include{./Chapter/Abstract}
+
+% % %
+% Begin of Body
+% % %
+\configbody
+
+% % When you request examiners to do peer review of your thesis, the paper should be double-spacing.
+% % When you submit your thesis, the paper must be single-spacing.
+\singlespacing
+% \doublespacing
+
+% % Chapterごとにファイルを分けて，それぞれをincludeする
+% % You should make files of each chapter, and include them.
+% % docmute package is convenient to edit and compile each file. If you are interested, please search the package.
+\include{./Chapter/Introduction}
+\include{./Chapter/Body}
+\include{./Chapter/Conclusion}
+
+% % %
+% End of Body
+% % %
+
+% % Bibliography style
+\singlespacing
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
+% % If you add references to a table of contents, uncomment the following line
+\addcontentsline{toc}{chapter}{References}
+
+% % You can make appendixes, if any.
+% \appendix
+% \include{./Chapter/hogehoge.tex}
+
+\end{document}

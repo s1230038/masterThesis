@@ -1,0 +1,373 @@
+Deep Reinforcement Learning in Forex Trading Using Metrics
+
+HARUGUHCI Takuma
+
+March 2021 
+
+LI Xiang    
+Associate Professor
+
+MORI Kazuyoshi
+Professor
+JING Lei
+Senior Associate Professor
+
+Acknowledgment
+I express our sincere thanks to Prof. LI Xiang for helpful discussions and suggestions during COVID-19 pandemic. Also, Referees Prof. MORI Kazuyoshi and Prof. JING Lei gave me advice for my thesis. I also thank the lab members.
+
+Abstract
+
+In recent years, Deep Q-learning (DQL) becomes more and more important to any field. Deep Q-learning, which is also one of deep reinforcement learning (DRL), is Q-learning with Deep Q Network (DQN). Before employing reinforcement learning for finance in earnest, the papers that applied machine learning tended to focus on predicting the future. The weakness in the predictive approach is to ignore the option to wait. Therefore, this thesis studies DQN for the retail foreign exchange trading (Forex, A.K.A. FX). The DQN utilizes multiple moving averages (MA) of the exchange rate history like USD/JPY as state element. Based on the results, this thesis presented two conclusions. Firstly, unfortunately, the agent failed to learn to get profit in both training and testing because MA was invalid metrics for Forex trading. Secondly, reinforcement learning itself was presumed to help to avoid losses. Accordingly, further investigation is needed to make this DQN method practical, considering other metrics as state element.
+
+
+Introduction
+Background
+Forex Trading
+Overview
+Foreign exchange is trading of currencies between two countries. For example, when a company in Japan imports some products from the U.S., it exchanges the yen into the U.S. dollar to pay.
+
+In addition to importers and exporters, there are speculators in Forex markets. Individual traders of them often utilize the retail foreign exchange trading (Forex, A.K.A. FX). In Forex, expecting the rate among currencies and taking the long or the short position, a trader tries to get the gain from the difference of the rate between present and future.
+
+The long position is the buying position where he gets the profit if the rate rises (e.g., 1=Y=100 noun 1=Y=120: Profit=Y=20). In the opposite case, he suffers a loss. On the other hand, The short position is the selling position where he gets the profit if the rate decrease (e.g., 1=Y=100 noun 1=Y=90 : Profit=Y=10). In the opposite case, he suffers a loss. Taking no position is called the square, which means that you get no profit and suffer no loss.
+
+In the following sections, let us see how a contract realize the above relationship.
+
+Details of Forex System
+
+      The overview of Forex entities
+  First, we look at the entities of Forex. In Figure  that simplifies the actual situation, there are traders, Forex companies, and the interbank market. Traders order a Forex company to take a long/short position or to liquidate the position, and then the Forex company conducts the cover deal in the interbank market.
+
+ Ignoring the revenue sources of the forex company such as transaction fee, let us consider the relationship among the long/short position, profit and loss (P/L), and the cover deal.
+
+
+      Timeline for long position when getting profit
+  
+
+    P/L and cover deal for long position when getting profit
+    
+
+Figure  shows that trader A makes a profit of Y= 20 on taking the long position. When the trader takes the long position at time noun, the Forex company exchanges yens for dollars as cover deal at time noun. In general, the cover deal means the real trading in the interbank market corresponding to a trader’s position.
+
+And then, suppose that the exchange rate 1=Y=100 changes to 1=Y=120 at time noun. The rate changes brings the trader floating P/L. The floating P/L is unrealized profit or loss which floats (changes) in correspondence with the exchange rate and which position he has. For example, if the exchange rate 1=Y=120 at time noun changes to 1=Y=110 at time noun unlike Figure , his floating P/L as +Y=20 also changes to +Y=10.
+
+At time noun, the trader liquidates his position to finally realize the profit as +Y=20. Liquidating a position means changing the position into the square, finalizing his P/L. And then, the Forex company exchanges dollars for yen as cover deal at time noun to pay the trader Y=20.
+
+There are four patterns for the taking positions and trader's P/L:
+
+  Long position when getting profit noun Figure  and Table   Long position when suffering loss noun Figure  and Table   Short position when suffering loss noun Figure  and Table   Short position when getting profit noun Figure  and Table 
+Look at following figures and tables to understand all relationships among positions, P/L, and the cover deal.
+
+
+
+      Timeline for long position when suffering loss
+  
+
+    P/L and cover deal for long position when suffering loss
+    
+
+
+
+      Timeline for short position when suffering loss
+  
+
+    P/L and cover deal for short position when suffering loss
+    
+
+
+
+      Timeline for short position when getting profit
+  
+
+    P/L and cover deal for short position when getting profit
+    
+
+The four patterns suggest two features. Firstly, the Forex company keeps the initial capital as Y=100 or 1 without any profit and any loss in any case. It shows that the cover deal literally covers the Forex company from the loss. 
+
+Secondly, the position has the state transition as Figure .
+
+
+      The diagram of the position state transition
+  
+
+Simplification
+Within the scope of this research, all you have to do is to learn the below rules:
+
+  Position State Transition as Figure   Position and floating P/L
+  
+    Long position: The dollar rate rises noun Profit as floating P/L
+    Long position: The dollar rate decreases noun Loss as floating P/L
+    Short position: The dollar rate rises noun Loss as floating P/L
+    Short position: The dollar rate decreases noun Profit as floating P/L
+    The P/L is finally realized after liquidating the position. 
+You do not have to consider the Forex company because it does not affect the trader's P/L.
+
+Reinforcement Learning
+Reinforcement learning (RL) is one of machine learning which learns mapping the pairs of situations-to-actions so as to maximize a reward. In general, the reinforcement learning is modeled as Markov decision process (MDP) like Figure . At the very beginning, the agent receives the state noun from the environment, and then the agent takes the action noun. The environment gives the agent the reward noun and the state noun in turn, and then the agent takes the action noun, and so on. The () shows the trajectory: 
+
+
+      The agent–environment interaction in an MDP
+  
+
+where noun is a final time step. The range of time steps between noun and noun is called episode.
+
+
+Q-Learning
+One of the methods in RL is Q-Learning. Before explaining it, we introduce some related equations. First, let us define noun which is called action-value function for policy noun such as
+
+
+
+Equation () means that noun outputs the expected return starting from state noun and taking the action noun, after that following policy noun. A policy noun is a rule where the agent determines the action, and the policy is calculated as conditional probability noun.
+
+Second, we introduce optimal action-value function noun, and define it as
+
+for all noun verbs noun and noun verbs noun where noun is set of all nonterminal states and the noun is set of all actions available in state noun.
+
+Third, based on Equation , it is known to be able to obtain the Bellman optimality equation for noun which is 
+
+The noun is probability of transition to state noun, from state noun taking action noun, the noun is expected immediate reward on transition from noun to noun under action noun, and the noun is discount-rate parameter.
+
+Lastly, let us consider Q-learning which is an algorithm defined by
+
+where the noun is learning rate.
+
+The () shows that Q-learning iterates updating the action-value function noun to directly approximate noun. When the learning converges, the second term of the () converges to zero, which means approximating noun since the noun verbs noun in the () is similar to Equation ().
+
+The results of updated the action-value function noun are called Q-value, and stored into the table which is called Q-table shown as the left side of Figure .
+
+Deep Q-learning
+It is difficult for Q-learning to solve the problem which has a large state space since the size of Q-table becomes huge. This is because all Q-values are allocated as the entire combination of both action and state which are discrete value. Its trouble is called as the curse of dimensionality.
+
+Deep Q Network (DQN), which is a neural network used by Deep Q-learning, can solve the trouble. As the right side of Figure  shows, Deep Q-learning regards each state element as each DQN input node, which means reducing the size of calculating Q-value. DQN outputs only each Q-value for each action.
+
+
+      Difference between Q-Learning and DQN
+  
+Previous Research and Motivation
+This paper includes three motivations. First motivation explains the reason to employ RL for Forex trading. 
+
+Before employing RL for finance in earnest, the papers that applied machine learning tended to focus on predicting the future. For example, Arash's survey showed that many papers about trading were related to prediction.
+
+The weakness in the predictive approach is to ignore the option to wait. For example, when a trader cannot be sure the direction of the exchange rate, the best strategy should be to wait without bringing any profit and any loss. However, the predictive approach completely disregards that option.
+
+On the other hand, RL allows the agent to consider waiting as part of actions. This is the reason to employ RL in my research.
+
+Second motivations is utilization of DQN. In terms of RL modeling, Forex trading can be characterized by the continuous of the state while the action is discrete. This is because, in most cases, the state definition includes the exchange rate history which is continuous. On the other hand, the action can be defined as discrete like the position transition in Figure .
+
+As mentioned in Section , DQN is suitable for the modeling where the state and the action are defined as continuous and discrete respectively. This is why this research employs DQN.
+
+The third motivation is to confirm the effect of metrics. Among Forex technical analysis, many metrics are utilized. This research focuses on simple moving average (MA) which is one of the most basic metrics in the analysis. The experiment verifies whether MA as state element of RL improves the performance of the agent.
+
+Method and Algorithm
+Overview
+This paper employs RL as Figure . To maximize the reward, the Q-values are calculated as the right side of Figure  using DQN.
+
+      RL for Forex trading
+  
+State
+The state element is defined as Equation () 
+
+The subscript noun means time step, and the same applies hereafter. The noun starts with 120 to calculate the moving average noun.
+
+The noun means current exchange rate.
+
+Denoted as noun, the () defines current position as
+
+where the agent is in.
+
+Equation () means moving averages:
+
+The noun means the exchange rate (price) at the time step noun.
+
+Equation () means floating P/L which corresponds to Section :
+
+
+The noun means the exchange rate when taking the position. For example, the noun verbs noun means that the 1 dollar had equalled 112.55 yen when the agent had taken the long or the short position. If the agent is in the square, the noun becomes zero.
+
+Deviation of Exchange Rate Data
+In fact, all data of the exchange rate is normalized as Equation  
+
+where the noun means the time period of the entire data history. The noun means original data of the dataset in Section . The time period noun depends on the number of the data in Table .
+
+The normalization narrows the range between maximum and minimum in the state space to reduce computational complexity.
+
+Action
+The action set noun is defined as Equation ():
+
+Equation () corresponds to the position transition as Figure .
+
+The () shows each action element noun belongs to the action set. Each action element noun means taken action at time noun.
+
+
+Action Modification
+Despite Equation , the agent may take wrong action. For example, he may liquidate wrongly even when he is in the square. This is because the agent must learn the position transition of Figure  although the transition is deterministic.
+
+Therefore, the RL system is implemented to replace a wrong action with the wait action as below.
+
+  In Square: the agent wrongly liquidates noun  wait action
+  In Short of Long position: the agent wrongly takes long or short position noun  wait action
+
+In addition, the RL system forces the agent to liquidate his position forcefully when one episode finishes. If the system does not, the agent can keep waiting to avoid losses in any case even if he takes a long or short position.
+
+Episode
+The final time step noun of one episode is defined as Equation () 
+
+
+One episode is defined as the ()  
+
+
+One step is defined as Equation ()
+
+
+
+P/L and Reward
+Equation () means profit and loss (P/L) which corresponds to Section :
+
+where noun is leverage to amplify P/L. The negative profit means losses.
+
+Note that the noun is the current exchange rate of time noun, not noun of cover deal in Section . It is simplification in order to make implementation easy.
+
+In this research, the reward is defined as same as the profit.
+
+DQN
+As agent of RL, this research utilizes DQN where the policy is Boltzmann Q Policy, or soft-max policy.
+
+The neural network is constructed with Keras as below:
+[caption=Neural network structure with Keras, label=list:network]
+  Layer (type)                 Output Shape              Param #   
+  =================================================================
+  flatten_1 (Flatten)          (None, 9)                 0         
+  _________________________________________________________________
+  dense_1 (Dense)              (None, 16)                160       
+  _________________________________________________________________
+  activation_1 (Activation)    (None, 16)                0         
+  _________________________________________________________________
+  dense_2 (Dense)              (None, 16)                272       
+  _________________________________________________________________
+  activation_2 (Activation)    (None, 16)                0         
+  _________________________________________________________________
+  dense_3 (Dense)              (None, 16)                272       
+  _________________________________________________________________
+  activation_3 (Activation)    (None, 16)                0         
+  _________________________________________________________________
+  dense_4 (Dense)              (None, 4)                 68        
+  _________________________________________________________________
+  activation_4 (Activation)    (None, 4)                 0         
+  =================================================================
+  Total params: 772
+  Trainable params: 772
+  Non-trainable params: 0
+
+In Listing , the flatten1 layer is the input layer which takes the state elements as Equation . The activation1, activation2, and activation3 layers utilize ReLU (Rectified Linear Unit) activation, and the activation4 layer uses linear activation. The dense1, dense2, dense3 and dense4 layers are densely-connected (fully-connected) neural network layers. The activation4 corresponds to the output layer on the right side of Figure  to decide to take an action as WAIT, SHORT, LONG or LIQUIDATE.
+
+Experiment
+The agent is trained based on Section  by 50,000 steps trading on the testing dataset which mostly equals 47 episodes. Each training episode consists of same data. After that, the agent is tested by trading of one episode on nine testing datasets. Note that each testing dataset make each environment interact with the agent exactly the same every episode. This is why testing consists of one episode.
+
+To confirm the effect of MA as metrics, the training and nine testing vary the number of MA from zero to five. For example, when the number of MA is four which is denoted as MA4, the MA elements are changed as Equation . When the number of MA is three which is denoted as MA3, the MA elements are changed as Equation , and so on. 
+
+
+
+
+
+Dataset
+The dataset consists of the USD/JPY (US Dollar vs. Japanese Yen) exchange rate where the candlestick range is five minutes. It is comprised of the training dataset and nine testing datasets as Table  shows. Note that the trained/tested data are not the entire ones but 1200 ones that correspond to Equation , which is listed as Trained/Tested Data Period column on Table .
+
+
+    Dataset of training and testing
+    
+
+Evaluation Method
+The evaluation method consists of two parts: waiting ratio and accumulated reward. 
+
+The first evaluation method is the accumulated reward which is defined as total rewards per one episode. It means the performance of agent's Forex trading. Note that the accumulated reward is equivalent to total P/L per one episode due to the definition of Section .
+
+The second evaluation method is the waiting ratio defined as Equation 
+As mentioned in Section , when a trader cannot be sure the direction of the exchange rate, he should wait. The waiting ratio shows whether RL realizes this strategy. The further the period of testing dataset is from the training period, the more the waiting ratio should increase.
+
+
+Details
+For details about source code and dataset, see the GitHub repository.
+
+Result
+Accumulated Reward
+Figure  shows the accumulated reward of each MA for each training episode. It suggests that the agent cannot learn how to make a profit because even the second half of the episodes show mostly negative rewards, as well as Table  shows. In addition, the number of MA seems to have little impact on the reward in the training.
+
+
+
+      Accumulated reward in training for the number of moving average (MA)
+  
+
+  
+    The average of accumulated reward in the last ten trainings for each MA
+    
+
+The same is true for Figure . Most rewards of the tests are negative, and the figure suggests that the number of MA could not improve the trading performance since each MA shows similar accumulated rewards. If the number of MA had some sort of impact on the performance, each MA would show the different accumulated reward.
+
+As a result, it is concluded that MA is invalid metrics for DQL of Forex trading.
+
+      Accumulated reward in testing for the number of MA
+  
+
+Waiting Ratio
+Figure  is the chart of the waiting ratio for each MA in the training episodes. It suggests that the waiting ratios of any number of MA tend to converge to the range of 70% to 75% as well as Figure  shows. 
+
+From Figure  to Figure , these figures indicate that the range of 70% to 75% is the boundary whether the loss absolutely occurs or not: the right sides of the range in the figures show that most data points are negative accumulated rewards.
+
+RL is presumed to help to avoid losses in Forex trading. As explained in the previous section, it was difficult for the agent to get profit with MA metrics, therefore the agent seemingly focuses on avoiding losses. 
+
+
+      Waiting ratio in training for the number of MA
+  
+
+      Average of waiting ratio in testing for the number of MA
+  
+
+      Scatter plot between waiting ratio and accumulated reward in training of MA0
+  
+
+      Scatter plot between waiting ratio and accumulated reward in training of MA1
+  
+
+      Scatter plot between waiting ratio and accumulated reward in training of MA2
+  
+
+      Scatter plot between waiting ratio and accumulated reward in training of MA3
+  
+
+      Scatter plot between waiting ratio and accumulated reward in training of MA4
+  
+
+      Scatter plot between waiting ratio and accumulated reward in training of MA5
+  
+Figure  and  are consistent with the expectation of Section : the further the period of testing dataset is from the training period, the more the waiting ratio increases. The waiting can prevent losses when the agent cannot expect the future exchange rate.
+
+In conclusion, RL itself is considered to be useful for avoiding losses in Forex trading.
+
+
+      Waiting ratio in testing for the number of MA
+  
+
+      Average of waiting ratio in testing
+  
+Conclusion
+According to the result of the accumulation reward, the experiments could not prove the importance of multiple MAs. We concluded that MA was invalid metrics for DQL of Forex trading. On the other hand, the result of the waiting ratio suggested that RL itself can be useful to avoid losses.
+
+The biggest problem was that the agent failed to learn to get profit in both training and testing. Unfortunately, my research method was not useful for a algorithmic trading system.
+
+Further investigations are needed to make this DQN method practical. Firstly, we have to consider other metrics as state element. For example, oscillator, Fibonacci retracement, relative strength index (RSI), or Bollinger Band can be the candidate of it. In addition, we may need to consider combining DQL with the price prediction model such as using convolutional neural network (CNN).
+
+Secondly, as Section  suggested, the agent with DQN is supposed to skip learning the position transition since the transition is deterministic. Therefore, we will have to find the way to realize it while DQN focuses on a stochastic environment.
+
+Lastly, we have to verify whether RL actually avoids losses in the trading. Section  suggested the RL usefulness, but it was not enough to prove it. To validate the evidence, we must also identify which statistics need to be analyzed.
+
+
+
+
+
+
+
+
+
+
+
+
+

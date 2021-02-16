@@ -1,0 +1,45 @@
+% % % Reference: 
+% http://tex.stackexchange.com/questions/86666/how-to-create-both-list-of-abbreviations-and-list-of-nomenclature-using-nomencl
+% ftp://ftp.kddilabs.jp/CTAN/macros/latex/contrib/acro/acro_en.pdf
+% % %
+
+% Configuration for hyperlink and list of acronyms
+\acsetup{hyperref=true, list-style=longtable, list-heading=chapter*}
+
+% class `abbrev': abbreviations:
+\DeclareAcronym{pc}{
+  short = PC ,
+  long  = Personal Computer ,
+  class = abbrev
+}
+\DeclareAcronym{ws}{
+  short = WS ,
+  long  = Work Station ,
+  class = abbrev
+}
+\DeclareAcronym{uoa}{
+  short = UoA,
+  long  = University of Aizu,
+  class = abbrev
+}
+
+% class `nomencl': nomenclature (symbol)
+\DeclareAcronym{A}{
+  short = $\bm{A}$ ,
+  long  = Matrix ,
+  sort  = A ,
+  class = nomencl
+}
+\DeclareAcronym{a}{
+  short = $\bm{a}$ ,
+  long  = Vector ,
+  sort  = a ,
+  class = nomencl
+}
+\DeclareAcronym{r}{
+  short = $\mathbb{R}$ ,
+  long  = Set of real numbers ,
+  sort  = R ,
+  class = nomencl
+}
+

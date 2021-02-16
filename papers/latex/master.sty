@@ -1,0 +1,480 @@
+% 修士論文 style file ver. 0.2774
+% by Yuki Murakami (2016/11/30)
+% Based on 修士論文 style file ver. 0.1774 by Yuichi Takahashi
+% last update:
+% v1.20 by Nobuo Sato
+% v0.1774 Wed Jul 25 16:04:38 JST 2008 by Yuichi Takahashi
+% v0.2774 Wed Nov 30 01:47:27 JST 2016 by Yuki Murakami
+
+% <変更点>
+% v0.2774 修士論文 Style file ver. 0.1774 からのアップデート
+% 必要なパッケージを読んでくるようusepackageの追加
+% 原稿サイズをgeometry.styに変更
+% main.tex の見通しを良くするため \showlists と \configbody コマンドの追加
+
+% <今後改良してくれる人への注意事項>
+% 謎の事情によってバージョン番号はx.x774である必要があります。
+
+% <スタイルファイルの説明>
+%
+% \usepackage{master}を使って読み込むだけで、
+% 目次に Chapter, Figure, Table の文字が入るようになります。
+% 原稿サイズの変更、参考文献タイトルの変更もしてます。
+%
+% それから、\maketitle の代わりに \makemasterthesistitle と 
+% \makeapproval というコマンドで、タイトルページと承認ページが生成できる 
+% ようにしてあります(スタイルファイルの後半部分)。
+% これら2つのコマンドを使うためには、プリアンブルで以下のパラメータを設定
+% して下さい。
+%
+% \title{}   ← 論文タイトル
+% \author{}  ← 自分の名前
+% \datestamp{}
+% \teacher{}                   ←\newcommand ではなく、
+% \teacherposition{}           \title{}, \author{} などと同じ
+% \mainreferee{}               ような形で使える。
+% \mainrefereeposition{}       
+% \secondreferee{}
+% \secondrefereeposition{}
+% \thirdreferee{}
+% \thirdrefereeposition{}
+%
+% このスタイルファイルはwallpaper.styをつかっていますので、
+% 同スタイルファイルが要求するファイルが必要となります。
+% wallpeper.styはパッケージに同梱してあります。
+%
+% TeXのマクロに関して分からないことがあれば、以下を参照のこと。
+% https://texwiki.texjp.org//?TeX入門%2Fマクロの作成
+% http://refluster.blogspot.jp/2010/08/blog-post.html
+% それでも分からない場合は検索。
+
+\NeedsTeXFormat{LaTeX2e}[2014/05/01]
+\ProvidesPackage{master}[2016/11/30 v0.2774  The University of Aizu]
+\def\j@urnalname{doctor.sty}
+\def\versi@ndate{Nov. 30, 2016}
+\def\versi@nno{ver. 0.2774}
+\def\copyrighth@lder{The University of Aizu}
+\typeout{Document Style `\j@urnalname' (\versi@nno) <\versi@ndate> \space [\copyrighth@lder]}
+\typeout{Master Style}
+
+% % % Needs Packages
+% style file では、\usepackage[option]{package}より\RequirePackage[option]{package}[date and other information]にする
+% http://triplepulu.blogspot.jp/2013/05/texclass-package.html
+\RequirePackage{wallpaper}   % 背景画像の読み込みのため。graphicx.sty, color.styよりもあとに読み込む。
+\RequirePackage{fancyhdr}    % Header, Footer のため
+\RequirePackage{times}       % Times fontの利用のため
+\RequirePackage{indentfirst} % 最初の段落からインデントをつけるため
+% geometry.styについて
+% http://joker.hatenablog.com/entry/2012/07/09/153537
+\RequirePackage[top=1truein, bottom=1truein, left=1.5truein, right=1truein]{geometry} % 用紙サイズの設定のため
+% tocloft.styについて
+% http://www.biwako.shiga-u.ac.jp/sensei/kumazawa/tex/tocloft.html
+% http://tex.stackexchange.com/questions/20337/adding-word-table-before-each-entry-in-list-of-tables
+\RequirePackage{tocloft}  % 図目次、表目次の見た目を変えるため
+\RequirePackage{setspace} % For single space or double space
+
+% % %
+% \def\hoge#1{\gdef\@hoge{#1}} <- hoge というマクロの定義
+% \def\@hoge{\@latex@warning@no@line{Warning message}} <- 引数なし(Default)の場合警告を出すように設定
+% という意味っぽい？
+% % %
+
+\def\datestamp#1{\gdef\@datestamp{#1}}
+\def\@datestamp{\@latex@warning@no@line{No \noexpand\datestamp given}}
+
+\def\teacher#1{\gdef\@teacher{#1}}
+\def\teacher@{\@latex@warning@no@line{No \noexpand\teacher given}}
+
+\def\teacherposition#1{\gdef\@teacherposition{#1}}
+\def\@teacherposition{\@latex@warning@no@line{No \noexpand\teacherposition given}}
+
+\def\atitle#1{\gdef\@atitle{#1}}
+
+\def\mainreferee#1{\gdef\@mainreferee{#1}}
+\def\@mainreferee{\@latex@warning@no@line{No \noexpand\mainreferee given}}
+
+\def\mainrefereeposition#1{\gdef\@mainrefereeposition{#1}}
+\def\@mainrefereeposition{\@latex@warning@no@line{No \noexpand\mainrefereeposition given}}
+
+\def\secondreferee#1{\gdef\@secondreferee{#1}}
+\def\@secondreferee{\@latex@warning@no@line{No \noexpand\secondreferee given}}
+
+\def\secondrefereeposition#1{\gdef\@secondrefereeposition{#1}}
+\def\@secondrefereeposition{\@latex@warning@no@line{No \noexpand\secondrefereeposition given}}
+
+\def\thirdreferee#1{\gdef\@thirdreferee{#1}}
+\def\@thirdreferee{\@latex@warning@no@line{No \noexpand\thirdreferee given}}
+
+\def\thirdrefereeposition#1{\gdef\@thirdrefereeposition{#1}}
+\def\@thirdrefereeposition{\@latex@warning@no@line{No \noexpand\thirdrefereeposition given}}
+
+%
+\def\chaptermark#1{}
+%
+% \newif\ifCOND -> 条件付きコンパイルのためのbool型の変数宣言
+% \CONDtrue もしくは \CONDfalse で変数に真偽を代入
+% http://uyota.asablo.jp/blog/2009/06/26/4389614
+\newif\if@chapapp%
+\@chapappfalse
+
+% % %
+%
+% toc 改変版 \chapter
+%
+% % %
+% tex level (in def command) -> c@secnumdepth
+% latex level -> secnumdepth
+% 名前の違いっぽい
+\setcounter{secnumdepth}{2}
+%
+% \m@ne -> -1
+% \refstepcounter{counterName} -> counterName++
+% \protect\hoge -> \hoge の展開を抑制する(あとで展開する)
+% \numberline -> ?
+% \addtocontents -> 以下のリンクを参照
+% http://www.biwako.shiga-u.ac.jp/sensei/kumazawa/tex/003.html
+% \addvspace{Length} -> 垂直方向にLengthだけ空白の挿入
+\def\@chapter[#1]#2{%
+  \ifnum \c@secnumdepth >\m@ne% 2 > -1 -> always true
+  \refstepcounter{chapter}%
+  \typeout{%
+    \if@chapapp%
+    ヽ（；´Д｀）ノ WTF\space\@chapapp\space\thechapter.%
+    \else% 実行される
+    (・∀・)LGTM!%
+    \space\thechapter\space\@chapapp.%
+    \fi}
+  \if@chapapp%%
+  \addcontentsline{toc}{chapter}{\protect
+    {\@chapapp}\space\numberline{\thechapter}#1}%spaceをいれて調整
+  %\numberline{\@chapapp\thechapter}%
+  %\protect \hspace{1.7cm}#1}%
+  %{\chaptername} \numberline{\thechapter}#1}%
+  \else%　実行される
+  \addcontentsline{toc}{chapter}{\protect
+    {\chaptername} \numberline{\thechapter}#1}%
+  %\numberline{\thechapter.}#1}%
+  \fi
+  \else%
+  \addcontentsline{toc}{chapter}{#1}%
+  \fi
+  \chaptermark{#1}%
+  \addtocontents{lof}{\protect\addvspace{10pt}}%
+  \addtocontents{lot}{\protect\addvspace{10pt}}%
+  \if@twocolumn % 2段組かどうか
+  \@topnewpage[\@makechapterhead{#2}]%
+  \else
+  \@makechapterhead{#2}%
+  \@afterheading
+  \fi %
+}
+
+% % %
+%
+% lof, lot 改変版 \caption
+%
+% % %
+% \long -> TeXのマクロの引数に改段落を許可する修飾子
+% http://d.hatena.ne.jp/dachs_hippo/comment/20070811
+% \csname hoge\endcsname -> \hogeというトークンを得る。hogeは任意の名前が許される。
+%\long\def\@caption#1[#2]#3{%
+%	\par
+%	\addcontentsline{\csname ext@#1\endcsname}{#1}%
+%	{\protect {\csname #1name\endcsname} \numberline{\csname the#1\endcsname}{\ignorespaces #2}}%
+%	\begingroup
+%		\@parboxrestore
+%		\if@minipage
+%			\@setminipage
+%		\fi
+%		\normalsize
+%		\@makecaption{\csname fnum@#1\endcsname}{\ignorespaces #3}\par
+%	\endgroup%
+%}
+%
+% 上の\captionはsubcaption.styと競合してしまうので、代替案が下記
+% \captionsetup{compatibility=false} を subcaption.sty の後に入れるとエラーが消える
+% ただ、図表目次に Figure とか Table が入らないので結局下記を使う
+% (図表目次に Figure とか Table が本当に必要かは不明)
+% http://www.yamamo10.jp/~yamamoto/comp/latex/make_doc/insert_fig/index.php
+%
+\renewcommand{\cftfigpresnum}{Figure\ }
+\renewcommand{\cfttabpresnum}{Table\ }
+%
+\newlength{\mylenf}
+\settowidth{\mylenf}{\cftfigpresnum}
+\setlength{\cftfignumwidth}{\dimexpr\mylenf+1.5em}
+\setlength{\cfttabnumwidth}{\dimexpr\mylenf+1.5em}
+
+%
+% Appendix
+%
+\def\appendix{\par
+  \setcounter{chapter}{0}
+  \setcounter{section}{0}
+  \def\@chapapp{Appendix}
+  %\def\@thechapter{\Alph{chapter}}
+  \@chapapptrue
+  \renewcommand\thechapter{\Alph{chapter}}
+  %\def\@thechapter{\Alph{chapter}}
+}% 
+
+%
+% Re-define names
+%
+\renewcommand\bibname{References}
+
+%
+% 原稿サイズ
+% -> geometry.sty に変更
+%
+%\textwidth  14.5cm
+%\textheight  23cm
+%\headheight 0mm
+%\headsep 0mm
+%\topmargin 0mm
+%\oddsidemargin 0.46in 
+%\evensidemargin 0in
+%\marginparwidth 0mm
+%\marginparsep 0mm
+
+% % %
+%
+% title page
+%
+% % %
+% \setlength{\baselineskip}{Length} -> 行間隔をLengthに設定。
+\def\makemasterthesistitle{%
+  \newgeometry{left=1truein, right=1truein}
+  \begin{titlepage}
+    %\vfill
+    \vspace*{0.5cm}
+	    {\Large
+	      \setlength{\baselineskip}{24pt}
+	      \begin{center}
+		A thesis submitted in partial satisfaction of the requirements \par
+		for the degree of Master of Computer Science and Engineering \par
+		in the Graduate School of the University of Aizu\par
+	      \end{center}
+	    }
+            
+	    \vspace{3.0cm}
+            
+	    {\LARGE 
+	      \setlength{\baselineskip}{36pt}
+	      \begin{center}
+		\textbf{\@title}\par
+	      \end{center}
+	    }
+	    
+	    \vspace{0.2cm}
+
+	    \begin{center}
+	      \includegraphics*[width=4.0cm]{./Figure/emblemg}
+	    \end{center}
+
+	    {\large
+	      \setlength{\baselineskip}{24pt}
+	      \begin{center}
+		by\par
+	      \end{center}
+
+	      \vspace{0.2cm}
+
+	      \begin{center}
+		\@author\par
+	      \end{center}
+
+	      %\begin{center}
+	      %Research Advisor: \textit{\@teacherposition} \textsl{\@teacher}\par
+	      %\end{center}
+	      
+	      \vspace{1.0cm}
+	      
+	      \begin{center}
+		\textsl{\@datestamp}
+	      \end{center}
+	    }
+	    %\vfill
+  \end{titlepage}
+  \restoregeometry
+  
+  \setcounter{footnote}{0}
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@thanks\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\datestamp\relax
+  \global\let\and\relax
+}
+
+% % %
+%
+% copyright page
+%
+% % %
+\def\makecopyright{
+  \setlength{\baselineskip}{14pt}
+  \thispagestyle{empty}
+  \vspace*{9.0cm}
+
+  \begin{center}
+    \copyright\space Copyright by \@author, \@datestamp\\
+    \vspace{1.0cm}
+    All Rights Reserved.
+  \end{center}
+  \newpage
+}
+
+% % %
+%
+% approval page
+%
+% % %
+\def\makeapproval{%
+  \ThisCenterWallPaper{0.45}{./Figure/emblem2g}
+  \setlength{\baselineskip}{14pt}     
+  \thispagestyle{empty}
+  \vspace*{0.8cm}
+
+  \begin{center}
+    The thesis titled%\par
+  \end{center}
+
+  \vspace{0.4cm}
+
+  \begin{center}
+    \@ifundefined{@atitle}{%
+      {\large \setlength{\baselineskip}{14pt}\textsl{\@title}}%\par
+    }{%
+      {\large \setlength{\baselineskip}{14pt}\textsl{\@atitle}}
+    }%
+  \end{center}
+
+  \vspace{0.2cm}
+
+  \begin{center}
+    by\par
+  \end{center}
+
+  \begin{center}
+    {\large \@author}% \par
+  \end{center}
+
+  \begin{center}
+    is reviewed and approved by:%\par
+  \end{center}
+
+  \vspace{1.0cm}
+  \begin{table}[!h]
+    \tabcolsep=1pt
+    %{\large
+    \renewcommand{\arraystretch}{2.0}
+    \centering
+    \begin{tabular}{l} 
+      \hspace{14.0cm} \\ 
+      \hline
+      \textbf{Main referee} \\ 
+      \textit{\@mainrefereeposition} \\             
+      \hspace*{1em}\textsl{\@mainreferee} \\
+      \hline 
+      \textit{\@secondrefereeposition} \\
+      \hspace*{1em}\textsl{\@secondreferee} \\
+      \hline
+      \textit{\@thirdrefereeposition} \\
+      \hspace*{1em}\textsl{\@thirdreferee} \\
+      \hline
+    \end{tabular}
+    %}
+  \end{table}
+
+  \vspace{0.1cm}
+
+  \begin{figure}[!h]
+    \centering
+    \includegraphics[height=3mm]{./Figure/mono3g}%The University of Aizu\par
+  \end{figure}
+
+  \vspace{0.1cm}
+
+  \begin{center}
+    \textsl{\@datestamp}\par
+  \end{center}
+  \ClearWallPaper
+  \newpage
+
+  \global\let\@atitle\@empty
+  \global\let\atitle\relax
+}
+%
+
+% % %
+%
+% front mattar page
+%
+% % %
+\def\makefrontmattar{%
+  \pagestyle{plain}
+  % % 表題、目次、序文等からなるフロントマター部用の設定をする
+  \frontmatter
+  % % タイトル、著作権、承認ページをつくる
+  \makemasterthesistitle
+  \makecopyright
+  \makeapproval
+  % % シングルスペースにする
+  \singlespacing
+  % % 目次
+  \setcounter{tocdepth}{3}
+  \tableofcontents
+  \newpage
+}
+
+% % %
+%
+% show lists of figures, tables, abbreviations and symbols
+%
+% % %
+\def\showlists#1#2#3#4{%
+  \if#1y
+  % % 図一覧
+  \listoffigures
+  \newpage
+  \fi
+
+  \if#2y
+  % % 表一覧
+  \listoftables
+  \newpage
+  \fi
+
+  \if#3y
+  \else
+    \if#4y
+    \else
+      \acsetup{hyperref=false}
+    \fi
+  \fi
+}
+
+% % %
+%
+% configration for thesis body
+%
+% % %
+\def\configbody{%
+  % % For Thesis Body
+  \pagenumbering{arabic}
+  \setcounter{chapter}{0}
+  \setcounter{page}{1}
+  % % HeaderとFooterの設定
+  \lhead[\fancyplain{}{}]{\fancyplain{}{\footnotesize\rightmark}}
+  \rhead[\fancyplain{}{\footnotesize\leftmark}]{\fancyplain{}{}}
+  \lfoot[\thepage]{}
+  \cfoot{\includegraphics[height=3mm]{./Figure/mono3}}
+  \rfoot[]{\thepage}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0.4pt}
+  % % 本文の始まり
+  \mainmatter
+  \pagestyle{fancyplain}
+}

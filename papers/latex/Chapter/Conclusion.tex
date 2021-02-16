@@ -1,0 +1,13 @@
+\chapter{Conclusion}
+\label{sec:conclusion}
+According to the result of the accumulation reward, the experiments could not prove the importance of multiple MAs. We concluded that MA may be invalid metrics for DQL of Forex trading. However, it is difficult to assert that MA is invalid metrics as state element because professional financial analysts still utilize it. Other causes of this research may prevent the performance. For example, hyperparameter such as step may be inappropriate or the way of utilizing MA may be too simple to perform for Forex trading. 
+
+On the other hand, the result of the waiting ratio suggested that RL itself can be useful to avoid losses.
+
+The biggest problem was that the agent failed to learn to get profit in both training and testing. Unfortunately, my research method was not useful for an algorithmic trading system.
+
+Further investigations are needed to make this DQN method practical. Firstly, we have to decide whether MA is invalid metrics for Forex trading with the experiments to vary hyperparameters, the way of utilizing MA, and the type of DQN. After that, if it turns out that MA is invalid, we have to consider other metrics. For example, oscillator, Fibonacci retracement, relative strength index (RSI), or Bollinger Band can be the candidate of it \cite{analysisMetrics}. In addition, we may need to consider combining DQL with the price prediction model such as using convolutional neural network (CNN) \cite{Suchaimanacharoen2020}.
+
+Secondly, as Section \ref{sec:actMod} suggested, the agent with DQN is supposed to skip learning the position transition since the transition is deterministic. Therefore, we will have to find the way to realize it while DQN focuses on a stochastic environment.
+
+Lastly, we have to verify whether RL actually avoids losses in the trading. Section \ref{sec:waitingRatioResult} suggested the RL usefulness, but it was not enough to prove it. To validate the evidence, we must also identify which statistics need to be analyzed.
