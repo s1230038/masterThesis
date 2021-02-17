@@ -5,9 +5,9 @@ This is the resource repository to provide materials for the master thesis:
 # Material List
 Master Thesis: papers\latex\m5231142.pdf  
 Presentation Slides: papers\presentation\m5231142_ThesisPresentation.pptx  
-Source Code: src  
+Source Code: src\  
 Result: src\result_MA*, src\analysis  
-Dataset: data  
+Dataset: data\  
 
 # Requirements
 Running of the source code has been confirmed for the below environment:  
