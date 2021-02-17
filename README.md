@@ -28,3 +28,6 @@ E.g.
 or
 
   $ python main.py
+
+# About Citation
+Some materials such as the presentation slide and an image file may omit indicating the source of reference because these are based on the thesis (m5231142.pdf). Note that all references in the repository is concentrated in References section of m5231142.pdf.
