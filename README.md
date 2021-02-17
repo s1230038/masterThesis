@@ -16,7 +16,6 @@ CUDA Version 10.1.243
 Python 3.7.9  
 
 # Initial setting the environment
-
   $ python -m venv venv  
   $ source venv/bin/activate  
   $ pip install -r requirements.txt  
