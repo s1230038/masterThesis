@@ -1,8 +1,15 @@
 # Master Thesis Resources
-This is the resource repository to provide the source code, the dataset, and the result for the master thesis: 
+This is the resource repository to provide materials for the master thesis: 
 
 Deep Reinforcement Learning in Forex Trading Using Metrics
 HARUGUHCI Takuma
+
+# Material List
+Master Thesis: papers\latex\m5231142.pdf
+Presentation Slides: papers\presentation\m5231142_ThesisPresentation.pptx
+Source Code: src
+Result: src\result_MA*, src\analysis
+Dataset: data
 
 # Initial setting the environment
 
