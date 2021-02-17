@@ -9,6 +9,12 @@ Source Code: src
 Result: src\result_MA*, src\analysis  
 Dataset: data  
 
+# Requirements
+Running of the source code has been confirmed for the below environment:  
+Ubuntu 18.04.4 LTS  
+CUDA Version 10.1.243  
+Python 3.7.9  
+
 # Initial setting the environment
 
   $ python -m venv venv  
