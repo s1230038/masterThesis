@@ -34,4 +34,4 @@ $ ./extractTestReward.sh
 $ ./extractWating.sh
 
 # About Citation
-Some materials such as the presentation slide and an image file may omit indicating the source of reference because these are based on the thesis (m5231142.pdf). Note that all references in the repository is concentrated in References section of m5231142.pdf.  
+Some materials such as the presentation slide and image files may omit indicating the source of reference because the slide is based on the thesis or images comprise the part of the thesis. Note that all references in the repository is concentrated in References section of the thesis as m5231142.pdf.  
