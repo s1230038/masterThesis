@@ -30,7 +30,7 @@ or
   $ python main.py  
 
 ## 4. Analysis the result
-$ ./extractTestReward.sh
+$ ./extractTestReward.sh  
 $ ./extractWating.sh
 
 # About Citation
