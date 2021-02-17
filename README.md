@@ -1,6 +1,6 @@
 # Master Thesis Resources
 This is the resource repository to provide materials for the master thesis:  
-Deep Reinforcement Learning in Forex Trading Using Metrics  
+*Deep Reinforcement Learning in Forex Trading Using Metrics*  
 
 # Material List
 Master Thesis: papers\latex\m5231142.pdf  
